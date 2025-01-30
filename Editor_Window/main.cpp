@@ -10,7 +10,8 @@
 // nptrEngine_Window 참조추가 -> 공유 프로젝트, Editor_Window
 #include "..\\nptrEngine_SOURCE\\nptrApplication.h"
 
-Application app;
+// namespace nptr
+nptr::Application app;
 
 #define MAX_LOADSTRING 100
 
@@ -34,8 +35,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,  // 프로그램 인스턴스 핸들 : 프�
     UNREFERENCED_PARAMETER(lpCmdLine);
 
     // TODO: Place code here.
-
-    app.test();
 
     // Initialize global strings
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);           // Editor_Window 이름 저장
@@ -81,7 +80,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,  // 프로그램 인스턴스 핸들 : 프�
         // 메세지가 없다 : false
         else
         {
-            // 게임 로직
+            // LOOP 
+            app.Run();
         }
     }
 
@@ -152,6 +152,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
       // 창 위치         // 창 크기 
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
    // 반환자료 HWND(핸들) : 생성한 윈도우 창의 메모리에 접근할 수 있는 핸들 반환!
+   
+   app.Initialize(hWnd);
 
    // 두개 만들면 윈도우창이 두개 생김! 
  //  HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,                    
@@ -214,57 +216,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             PAINTSTRUCT ps;
 
-            // HPEN newPen, oldPen  :  핸들 만들기(선언)
-            // -> newPen = CreatePen(...)  :  GDI 오브젝트 만들기(힙에 동적으로 할당됨)
-            // -> oldPen = SelectObject(DC, newPen)  :  DC 에 선택하되 이때 이전 핸들을 반드시 저장(디폴트 핸들)
-            // -> Rectangle, Ellipse, ..             :  선택한 선 혹은 색상 사용
-            // -> SelectObject(DC, oldPen)           :  선택 해제(기존 디폴트 선 or 색상으로 초기화)
-            // -> DeleteObject(newPen)               :  만들었던 선 or 색상 삭제 (힙에 동적 할당한 메모리 해제)
-
-            // DC (Device Context) : 화면 출력에 필요한 모든 정보를 가지는 데이터 구조체
-            // GDI 모듈에 의해서 관리됨 
-            // 폰트, 선의 굵기, 색상 등.. 
-            // 화면 출력에 필요한 모든 경우는 WINAPI 에서는 DC 를 통해서 작업을 진행함.
             HDC hdc = BeginPaint(hWnd, &ps);
-
-            // 오브젝트 배경 색상
-            // 색상 만들기 - RGB 전달인자값, 메모리를 추가로 할당시킴(힙에 동적할당!)
-            HBRUSH brush = CreateSolidBrush(RGB(0, 0, 255));
-            // 만든 파랑색 브러쉬 DC 로 선택하고, 흰색 브러쉬 반환해서 임시변수에 저장
-            HBRUSH oldBrush = (HBRUSH)SelectObject(hdc, brush);
-
-            // 윈도우창에 네모 그리기 -> 0,0(좌측상단부터) 기준 값이 전달인자로 들어간다. //////// 파랑색
-            Rectangle(hdc, 100,100,200,200);
-
-            // 기존 DC 인 흰색 브러쉬 선택
-            (HBRUSH)SelectObject(hdc, oldBrush);
-            // 동적할당 시켜서 만든 파랑 브러쉬 메모리 해제 (중요 !!!!!!!!!!!!!!!!!!!) =============================================
-            DeleteObject(brush);
-
-            // 오브젝트 선 색상 + 스타일
-            HPEN redPen = CreatePen(PS_SOLID, 2, RGB(255, 0, 0));
-            // 새로 만든 빨간 선 선택 및 기존 디폴트 선값 반환 
-            HPEN oldPen = (HPEN)SelectObject(hdc, redPen);
-
-
-            // 원 그리기 -> 네모그리기에서 네모 안에 원이 그려진다.                    //////// 하얀색
-            Ellipse(hdc, 200, 200, 300, 300); 
-
-            // 기존 디폴트 선으로 다시 선택
-            SelectObject(hdc, oldPen);      
-            // 동적할당 시켜서 만든 빨간 선 메모리 해제 (중요 !!!!!!!!!!!!!!!!!!!) =============================================
-            DeleteObject(redPen);
-            
-
-            // 스톡 오브젝트(Stock Object) : 기본으로 자주 사용되는 GDI 오브젝트들은 미리 DC 안에 만들어져 있다. 
-            // GetStckObject();
-            HBRUSH grayBrush = (HBRUSH)GetStockObject(GRAY_BRUSH);
-            oldBrush = (HBRUSH)SelectObject(hdc, grayBrush);
-
-            Rectangle(hdc, 400, 400, 500, 500);
-            // 스톡 오브젝트를 사용해도, 기존 디폴트 오브젝트로 DC 를 되돌려 놓는 것이 올바른 API 사용법이다.
-            SelectObject(hdc, oldBrush);
-            
 
             // TODO: Add any drawing code that uses hdc here...
             EndPaint(hWnd, &ps);
