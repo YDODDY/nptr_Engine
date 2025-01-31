@@ -1,4 +1,5 @@
 #include "nptrApplication.h"
+#include "GameObject.h"
 
 namespace nptr
 {   
@@ -6,8 +7,6 @@ namespace nptr
         : mHwnd(nullptr)
         , mHdc(nullptr)
         , mSpeed(0)
-        , mX(0)
-        , mY(0)
     {
 
     }
@@ -21,6 +20,8 @@ namespace nptr
 		// 핸들, DC 받아두기 - 계속 생성하지 않고 받아서 사용
 		mHwnd = hwnd;
 		mHdc = GetDC(hwnd);
+        mPlayer.SetPosition(0, 0);
+        mPlayer2.SetPosition(300, 300);
 	}
 
 	void Application::Run()
@@ -32,34 +33,42 @@ namespace nptr
 
 	void Application::Update()
 	{
-        mSpeed += 0.01f;
+  //      mSpeed += 0.01f;
+/*
 
         // 내가 오른쪽 키를 입력 받았다면 x 좌표 + 
         // 좌 x 좌표 -
         // 위아래는 y 좌표 -+
 
+        float x = mPlayer.GetPositionX();
+        float y = mPlayer.GetPositionY();
         // 키 상태 체크하는 함수 
         // 좌                         Microsoft : 0x8000 넣으라고 해서 넣는 것 
         if (GetAsyncKeyState(VK_LEFT) & 0x8000)
         {
-            mX -= 0.01f;
-        }
+            x -= 0.01f;
+        }  
         // 우
         if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
         {
-            mX += 0.01f;
+            x += 0.01f;
         }    
         // WINDOW 좌표계에서 위는 y--, 아래는 y++
         // 위
         if (GetAsyncKeyState(VK_UP) & 0x8000)
         {
-            mY -= 0.01f;
+            y -= 0.01f;
         }    
         // 아래
         if (GetAsyncKeyState(VK_DOWN) & 0x8000)
         {
-            mY += 0.01f;
+            y += 0.01f;
         }
+        mPlayer.SetPosition(x, y);
+*/
+        // GameObject
+        mPlayer.Update();
+        mPlayer2.Update();
 	}
 
 	void Application::LateUpdate()
@@ -69,6 +78,10 @@ namespace nptr
 
 	void Application::Render()
 	{
+        // GameObject
+        mPlayer.Render(mHdc);
+        mPlayer2.Render(mHdc);
+        /*
         // HPEN newPen, oldPen  :  핸들 만들기(선언)
         // -> newPen = CreatePen(...)  :  GDI 오브젝트 만들기(힙에 동적으로 할당됨)
         // -> oldPen = SelectObject(DC, newPen)  :  DC 에 선택하되 이때 이전 핸들을 반드시 저장(디폴트 핸들)
@@ -98,8 +111,10 @@ namespace nptr
         // 기존 디폴트 선으로 다시 선택
         //SelectObject(mHdc, oldPen);
 
+        float x = mPlayer.GetPositionX();
+        float y = mPlayer.GetPositionY();
         // 윈도우창에 네모 그리기 -> 0,0(좌측상단부터) 기준 값이 전달인자로 들어간다. //////// 파랑색
-        Rectangle(mHdc, 100 + mX, 100 + mY, 200 + mX, 200 + mY);
+        Rectangle(mHdc, 100 + x, 100 + y, 200 + x, 200 + y);
 
         // 기존 DC 인 흰색 브러쉬 선택
         (HBRUSH)SelectObject(mHdc, oldBrush);
@@ -121,5 +136,6 @@ namespace nptr
 
 
 //		Rectangle(mHdc, 500, 500, 600, 600);
+        */
 	}
 }

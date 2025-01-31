@@ -1,5 +1,7 @@
 #pragma once
 #include "CommonInclude.h" 
+#include "GameObject.h"
+#include "GameObject2.h"
 
 namespace nptr
 {
@@ -9,7 +11,7 @@ namespace nptr
 		Application();
 		~Application();
 
-		void Initialize(HWND hwnd);
+		void Initialize(HWND hwnd); 
 		void Run();
 
 		void Update();
@@ -22,7 +24,11 @@ namespace nptr
 		HDC mHdc;
 
 		float mSpeed;
-		float mX;
-		float mY;
+
+		// 플레이어에게 필요한 변수 ? 같은 것
+//		float mX;
+//		float mY;
+		GameObject mPlayer;
+		GameObject2 mPlayer2;
 	};
 }
