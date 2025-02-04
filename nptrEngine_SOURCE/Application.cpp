@@ -1,5 +1,6 @@
 #include "nptrApplication.h"
 #include "GameObject.h"
+#include "Input.h"
 
 namespace nptr
 {   
@@ -22,6 +23,8 @@ namespace nptr
 		mHdc = GetDC(hwnd);
         mPlayer.SetPosition(0, 0);
         mPlayer2.SetPosition(300, 300);
+
+        Input::Initialize();
 	}
 
 	void Application::Run()
@@ -67,6 +70,10 @@ namespace nptr
         mPlayer.SetPosition(x, y);
 */
         // GameObject
+
+        // 키입력 받고 플레이어 로직 돌리기
+        Input::Update();
+
         mPlayer.Update();
         mPlayer2.Update();
 	}
