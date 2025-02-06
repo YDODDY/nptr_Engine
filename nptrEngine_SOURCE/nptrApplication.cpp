@@ -8,7 +8,10 @@ namespace nptr
     Application::Application()
         : mHwnd(nullptr)
         , mHdc(nullptr)
-        , mSpeed(0)
+        , mWidth(0)
+        , mHeight(0)
+        , mBackHdc(NULL)
+        , mBackBuffer(NULL)
     {
 
     }
@@ -17,13 +20,39 @@ namespace nptr
 
     }
 
-	void Application::Initialize(HWND hwnd)
+	void Application::Initialize(HWND hwnd, UINT width, UINT height)
 	{
 		// 핸들, DC 받아두기 - 계속 생성하지 않고 받아서 사용
 		mHwnd = hwnd;
 		mHdc = GetDC(hwnd);
         mPlayer.SetPosition(0, 0);
     //    mPlayer2.SetPosition(300, 300);
+
+
+        // 브라우저 상단 영역과 스크롤 바 영역 등을 뺀 실제 작업 영역을 알아야 한다.
+        RECT rect = {0,0,width, height};
+        // 오른쪽 - 왼쪽 : 가로길이
+        mWidth = rect.right - rect.left;
+        // 아래 - 위 : 세로길이
+        mHeight = rect.bottom - rect.top;
+
+        // 작업영역 크기를 width, height 값으로 조정
+        AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, false);
+        ShowWindow(mHwnd, true);
+        SetWindowPos(mHwnd, nullptr, 0, 0,
+            mWidth, mHeight, 0);
+
+        // HDC 로 이미지 한장 더 만들기
+        mBackBuffer = CreateCompatibleBitmap(mHdc, width, height);
+
+        // 메모리 더 쓰고 연산 줄이기 (메모리 줄이고 연산 늘리기 X)
+        // 백버퍼 가르킬 DC 생성
+        mBackHdc = CreateCompatibleDC(mHdc);
+
+        // 연결
+        HBITMAP oldBitmap = (HBITMAP)SelectObject(mBackHdc, mBackBuffer);
+        // 예전거 지우기
+        DeleteObject(oldBitmap);
 
         Input::Initialize();
         Time::Initialize();
@@ -88,10 +117,16 @@ namespace nptr
 
 	void Application::Render()
 	{
-        Time::Render(mHdc);
+        // 더블 버퍼링
+        // HDC 를 두개 사용하여 그리고 '지우는 과정' 을 숨긴다. 
+        // 그리고 바꾸고 그리고 바꾸고 
+
+        Rectangle(mBackHdc, 0, 0, 1600, 900);
+
+        Time::Render(mBackHdc);
 
         // GameObject
-        mPlayer.Render(mHdc);
+        mPlayer.Render(mBackHdc);
   //      mPlayer2.Render(mHdc);
         /*
         // HPEN newPen, oldPen  :  핸들 만들기(선언)
@@ -149,5 +184,9 @@ namespace nptr
 
 //		Rectangle(mHdc, 500, 500, 600, 600);
         */
+
+        // backBuffer 에 있는걸 원본 buffer 에 복사 (그리기)
+        BitBlt(mHdc, 0,0,mWidth, mHeight, mBackHdc, 0,0, SRCCOPY);
+
 	}
 }

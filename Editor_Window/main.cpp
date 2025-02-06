@@ -147,13 +147,17 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // Store instance handle in our global variable
-                                                     // 윈도우 종류(창, 팝업 .. )
+   
+   const UINT width = 1600;
+   const UINT height = 900;
+
+   // 윈도우 종류(창, 팝업 .. )
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,                       // Editor_Window 라는 이름으로 윈도우 창 만들기
       // 창 위치         // 창 크기 
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+      CW_USEDEFAULT, 0, width, height, nullptr, nullptr, hInstance, nullptr);
    // 반환자료 HWND(핸들) : 생성한 윈도우 창의 메모리에 접근할 수 있는 핸들 반환!
    
-   app.Initialize(hWnd);
+   app.Initialize(hWnd, width, height);
 
    // 두개 만들면 윈도우창이 두개 생김! 
  //  HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,                    

@@ -22,7 +22,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Time.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Application.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)nptrApplication.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)GameObject.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)GameObject2.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Input.cpp" />
