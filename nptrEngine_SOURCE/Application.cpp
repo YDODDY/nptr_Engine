@@ -1,6 +1,7 @@
 #include "nptrApplication.h"
 #include "GameObject.h"
 #include "Input.h"
+#include "Time.h"
 
 namespace nptr
 {   
@@ -22,9 +23,10 @@ namespace nptr
 		mHwnd = hwnd;
 		mHdc = GetDC(hwnd);
         mPlayer.SetPosition(0, 0);
-        mPlayer2.SetPosition(300, 300);
+    //    mPlayer2.SetPosition(300, 300);
 
         Input::Initialize();
+        Time::Initialize();
 	}
 
 	void Application::Run()
@@ -73,9 +75,10 @@ namespace nptr
 
         // 키입력 받고 플레이어 로직 돌리기
         Input::Update();
+        Time::Update();
 
         mPlayer.Update();
-        mPlayer2.Update();
+  //      mPlayer2.Update();
 	}
 
 	void Application::LateUpdate()
@@ -85,9 +88,11 @@ namespace nptr
 
 	void Application::Render()
 	{
+        Time::Render(mHdc);
+
         // GameObject
         mPlayer.Render(mHdc);
-        mPlayer2.Render(mHdc);
+  //      mPlayer2.Render(mHdc);
         /*
         // HPEN newPen, oldPen  :  핸들 만들기(선언)
         // -> newPen = CreatePen(...)  :  GDI 오브젝트 만들기(힙에 동적으로 할당됨)
