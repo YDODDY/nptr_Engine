@@ -16,19 +16,13 @@ namespace nptr
 	// 초기화
 	void Input::Initialize()
 	{					    // typedef unsigned int UINT;
-		for (size_t i = 0; i < (UINT)eKeyCode::End; i++)
-		{
-			Key key = {};
-			key.bPressed = false;
-			key.state = eKeyState::None;
-			key.keyCode = (eKeyCode)i;
-
-			mKeys.push_back(key);
-		}
+		createKeys();
 	}
 
 	void Input::Update()
 	{
+		updateKeys();
+/*
 		for (size_t i = 0; i < mKeys.size(); i++)
 		{
 			// 키가 눌렸는지 
@@ -54,5 +48,60 @@ namespace nptr
 			}
 
 		}
+*/
+	}
+	void Input::createKeys()
+	{
+		for (size_t i = 0; i < (UINT)eKeyCode::End; i++)
+		{
+			Key key = {};
+			key.bPressed = false;
+			key.state = eKeyState::None;
+			key.keyCode = (eKeyCode)i;
+
+			mKeys.push_back(key);
+		}
+	}
+	void Input::updateKeys()
+	{
+		std::for_each(mKeys.begin(), mKeys.end(),
+			[](Key& key)-> void
+			{
+				updateKey(key);
+			});
+
+	}
+	void Input::updateKey(Input::Key& key)
+	{
+		if (isKeyDown(key.keyCode))
+		{
+			updateKeyDown(key);
+		}
+		else
+		{
+			updateKeyUp(key);
+		}
+	}
+	bool Input::isKeyDown(eKeyCode code)
+	{
+		return GetAsyncKeyState(ASCII[(UINT)code]) & 0x8000;
+	}
+	void Input::updateKeyDown(Input::Key& key)
+	{
+		if (key.bPressed == true)
+			key.state = eKeyState::Pressed;
+		else
+			key.state = eKeyState::Down;
+
+		key.bPressed = true;
+	}
+	void Input::updateKeyUp(Input::Key& key)
+	{
+		if (key.bPressed == true)
+			key.state = eKeyState::Up;
+		else
+			key.state = eKeyState::None;
+		
+		key.bPressed = false;
 	}
 }
