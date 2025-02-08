@@ -38,6 +38,6 @@ namespace nptr
 //		float mX;
 //		float mY;
 		GameObject mPlayer;
-	//	GameObject2 mPlayer2;
+		GameObject2 mPlayer2;
 	};
 }

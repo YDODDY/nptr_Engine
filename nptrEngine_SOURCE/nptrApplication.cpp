@@ -26,7 +26,7 @@ namespace nptr
 		mHwnd = hwnd;
 		mHdc = GetDC(hwnd);
         mPlayer.SetPosition(0, 0);
-    //    mPlayer2.SetPosition(300, 300);
+        mPlayer2.SetPosition(300, 300);
 
 
         // 브라우저 상단 영역과 스크롤 바 영역 등을 뺀 실제 작업 영역을 알아야 한다.
@@ -60,9 +60,9 @@ namespace nptr
 
 	void Application::Run()
 	{
+		Render();
 		Update();
 		LateUpdate();
-		Render();
 	}
 
 	void Application::Update()
@@ -107,7 +107,7 @@ namespace nptr
         Time::Update();
 
         mPlayer.Update();
-  //      mPlayer2.Update();
+        mPlayer2.Update();
 	}
 
 	void Application::LateUpdate()
@@ -127,7 +127,7 @@ namespace nptr
 
         // GameObject
         mPlayer.Render(mBackHdc);
-  //      mPlayer2.Render(mHdc);
+        mPlayer2.Render(mHdc);
         /*
         // HPEN newPen, oldPen  :  핸들 만들기(선언)
         // -> newPen = CreatePen(...)  :  GDI 오브젝트 만들기(힙에 동적으로 할당됨)
@@ -187,6 +187,6 @@ namespace nptr
 
         // backBuffer 에 있는걸 원본 buffer 에 복사 (그리기)
         BitBlt(mHdc, 0,0,mWidth, mHeight, mBackHdc, 0,0, SRCCOPY);
-
 	}
 }
+

@@ -1,5 +1,6 @@
 #include "GameObject2.h"
 #include "Input.h"
+#include "Time.h"
 
 namespace nptr
 {
@@ -13,6 +14,27 @@ namespace nptr
 	}
 	void GameObject2::Update()
 	{
+		const int speed = 100.0f;
+
+		// 왼쪽으로 아직 안갔다면 -> X 값만 해보기
+		if (GetMovingDir() == false)
+		{
+			mX -= speed * Time::DeltaTime();
+			if (GetPositionX() < 0)
+			{
+				isMovingLeft = true;
+			}
+		}
+		else
+		{
+			mX += speed * Time::DeltaTime();
+			if (GetPositionX() > 300)
+			{
+				isMovingLeft = false;
+			}
+		}
+		
+		/*
 		if (Input::GetKey(eKeyCode::A))
 		{
 			mX -= 0.01f;
@@ -32,6 +54,7 @@ namespace nptr
 		{
 			mY += 0.01f;
 		}
+		*/
 	}
 	void GameObject2::LateUpdate()
 	{
@@ -45,4 +68,5 @@ namespace nptr
 		(HBRUSH)SelectObject(hdc, oldBrush);
 		DeleteObject(brush);
 	}
+
 }

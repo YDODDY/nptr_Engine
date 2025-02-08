@@ -22,10 +22,12 @@ namespace nptr
 		float GetPositionX() { return mX; }
 		float GetPositionY() { return mY; }
 
+		bool GetMovingDir() { return isMovingLeft; }
+		bool isMovingLeft;
+
 	private:
 		float mX;
 		float mY;
-
 	};
 }
 
