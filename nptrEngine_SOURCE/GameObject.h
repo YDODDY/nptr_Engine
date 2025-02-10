@@ -1,9 +1,12 @@
 #pragma once
 #include "CommonInclude.h"
+#include "BulletObject.h"
 
 namespace nptr
 {
 	// Actor
+
+	class BulletObject;
 
 	class GameObject
 	{
@@ -24,6 +27,8 @@ namespace nptr
 
 		float GetPositionX()	{  return mX;  }
 		float GetPositionY()  {  return mY;  }
+
+		BulletObject* bullet;
 
 	private:
 

@@ -1,5 +1,6 @@
 #include "nptrApplication.h"
 #include "GameObject.h"
+#include "BulletObject.h"
 #include "Input.h"
 #include "Time.h"
 
@@ -26,8 +27,10 @@ namespace nptr
 		mHwnd = hwnd;
 		mHdc = GetDC(hwnd);
         mPlayer.SetPosition(0, 0);
-        mPlayer2.SetPosition(300, 300);
-
+        bullet.SetPosition(0, 0);
+        mPlayer2.SetPosition(300, 300);    
+        mPlayer.bullet = &bullet;
+        bullet.player = &mPlayer;
 
         // 브라우저 상단 영역과 스크롤 바 영역 등을 뺀 실제 작업 영역을 알아야 한다.
         RECT rect = {0,0,width, height};
@@ -108,6 +111,7 @@ namespace nptr
 
         mPlayer.Update();
         mPlayer2.Update();
+        bullet.Update();
 	}
 
 	void Application::LateUpdate()
@@ -126,8 +130,9 @@ namespace nptr
         Time::Render(mBackHdc);
 
         // GameObject
+        bullet.Render(mBackHdc);
         mPlayer.Render(mBackHdc);
-        mPlayer2.Render(mHdc);
+        mPlayer2.Render(mBackHdc);
         /*
         // HPEN newPen, oldPen  :  핸들 만들기(선언)
         // -> newPen = CreatePen(...)  :  GDI 오브젝트 만들기(힙에 동적으로 할당됨)

@@ -2,6 +2,7 @@
 #include "CommonInclude.h" 
 #include "GameObject.h"
 #include "GameObject2.h"
+#include "BulletObject.h"
 
 namespace nptr
 {
@@ -39,5 +40,7 @@ namespace nptr
 //		float mY;
 		GameObject mPlayer;
 		GameObject2 mPlayer2;
+		BulletObject bullet;
+	
 	};
 }

@@ -1,4 +1,5 @@
 #include "GameObject.h"
+#include "BulletObject.h"
 #include "input.h"
 #include "Time.h"
 
@@ -35,6 +36,11 @@ namespace nptr
         if (Input::GetKey(eKeyCode::Down))
         {
             mY += speed * Time::DeltaTime();
+        }
+        if (Input::GetKey(eKeyCode::SpaceBar))
+        {
+            bullet->SetPosition(GetPositionX(), GetPositionY());
+            bullet->isPlayerShot = true;
         }
 	}
 	void GameObject::LateUpdate()
