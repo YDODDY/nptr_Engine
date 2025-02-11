@@ -13,6 +13,7 @@ namespace nptr
         , mHeight(0)
         , mBackHdc(NULL)
         , mBackBuffer(NULL)
+        , mGameObjects{}
     {
 
     }
@@ -26,11 +27,6 @@ namespace nptr
 		// 핸들, DC 받아두기 - 계속 생성하지 않고 받아서 사용
 		mHwnd = hwnd;
 		mHdc = GetDC(hwnd);
-        mPlayer.SetPosition(0, 0);
-        bullet.SetPosition(0, 0);
-        mPlayer2.SetPosition(300, 300);    
-        mPlayer.bullet = &bullet;
-        bullet.player = &mPlayer;
 
         // 브라우저 상단 영역과 스크롤 바 영역 등을 뺀 실제 작업 영역을 알아야 한다.
         RECT rect = {0,0,width, height};
@@ -44,6 +40,13 @@ namespace nptr
         ShowWindow(mHwnd, true);
         SetWindowPos(mHwnd, nullptr, 0, 0,
             mWidth, mHeight, 0);
+
+        
+        // 동적할당해서 배열에 넣기
+        GameObject* gameObj = new GameObject();
+        mGameObjects.push_back(gameObj);
+
+
 
         // HDC 로 이미지 한장 더 만들기
         mBackBuffer = CreateCompatibleBitmap(mHdc, width, height);
@@ -109,9 +112,11 @@ namespace nptr
         Input::Update();
         Time::Update();
 
-        mPlayer.Update();
-        mPlayer2.Update();
-        bullet.Update();
+        for (size_t i = 0; i < mGameObjects.size(); i++)
+        {
+            mGameObjects[i]->Update();
+        }
+
 	}
 
 	void Application::LateUpdate()
@@ -128,10 +133,12 @@ namespace nptr
 
         Time::Render(mBackHdc);
 
+        for (size_t i = 0; i < mGameObjects.size(); i++)
+        {
+            mGameObjects[i]->Render(mBackHdc);
+        }
+
         // GameObject
-        bullet.Render(mBackHdc);
-        mPlayer.Render(mBackHdc);
-        mPlayer2.Render(mBackHdc);
         /*
         // HPEN newPen, oldPen  :  핸들 만들기(선언)
         // -> newPen = CreatePen(...)  :  GDI 오브젝트 만들기(힙에 동적으로 할당됨)
