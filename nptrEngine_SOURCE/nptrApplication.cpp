@@ -124,8 +124,7 @@ namespace nptr
         // 더블 버퍼링
         // HDC 를 두개 사용하여 그리고 '지우는 과정' 을 숨긴다. 
         // 그리고 바꾸고 그리고 바꾸고 
-
-        Rectangle(mBackHdc, 0, 0, 1600, 900);
+        clearRenderTarget();
 
         Time::Render(mBackHdc);
 
@@ -189,9 +188,19 @@ namespace nptr
 
 //		Rectangle(mHdc, 500, 500, 600, 600);
         */
+        copyRenderTarget(mBackHdc,mHdc);
+	}
+
+    void Application::clearRenderTarget()
+    {
+        Rectangle(mBackHdc, -1, -1, 1601, 901);
+    }
+
+    void Application::copyRenderTarget(HDC source, HDC dest)
+    {
 
         // backBuffer 에 있는걸 원본 buffer 에 복사 (그리기)
-        BitBlt(mHdc, 0,0,mWidth, mHeight, mBackHdc, 0,0, SRCCOPY);
-	}
+        BitBlt(dest, 0, 0, mWidth, mHeight, source, 0, 0, SRCCOPY);
+    }
 }
 

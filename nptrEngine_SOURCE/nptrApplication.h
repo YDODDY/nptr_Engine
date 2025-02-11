@@ -21,6 +21,10 @@ namespace nptr
 		void Render();
 
 	private:
+		void clearRenderTarget();
+		void copyRenderTarget(HDC source, HDC dest);
+
+	private:
 		HWND mHwnd;
 		HDC mHdc;
 
