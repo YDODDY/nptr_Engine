@@ -3,6 +3,7 @@
 #include "BulletObject.h"
 #include "Input.h"
 #include "Time.h"
+#include "SceneManager.h"
 
 namespace nptr
 {   
@@ -13,7 +14,6 @@ namespace nptr
         , mHeight(0)
         , mBackHdc(NULL)
         , mBackBuffer(NULL)
-        , mGameObjects{}
     {
 
     }
@@ -41,13 +41,6 @@ namespace nptr
         SetWindowPos(mHwnd, nullptr, 0, 0,
             mWidth, mHeight, 0);
 
-        
-        // 동적할당해서 배열에 넣기
-        GameObject* gameObj = new GameObject();
-        mGameObjects.push_back(gameObj);
-
-
-
         // HDC 로 이미지 한장 더 만들기
         mBackBuffer = CreateCompatibleBitmap(mHdc, width, height);
 
@@ -62,6 +55,7 @@ namespace nptr
 
         Input::Initialize();
         Time::Initialize();
+        SceneManager::Initialize();
 	}
 
 	void Application::Run()
@@ -111,12 +105,7 @@ namespace nptr
         // 키입력 받고 플레이어 로직 돌리기
         Input::Update();
         Time::Update();
-
-        for (size_t i = 0; i < mGameObjects.size(); i++)
-        {
-            mGameObjects[i]->Update();
-        }
-
+        SceneManager::Update();
 	}
 
 	void Application::LateUpdate()
@@ -132,12 +121,6 @@ namespace nptr
         clearRenderTarget();
 
         Time::Render(mBackHdc);
-
-        for (size_t i = 0; i < mGameObjects.size(); i++)
-        {
-            mGameObjects[i]->Render(mBackHdc);
-        }
-
         // GameObject
         /*
         // HPEN newPen, oldPen  :  핸들 만들기(선언)
@@ -195,6 +178,8 @@ namespace nptr
 
 //		Rectangle(mHdc, 500, 500, 600, 600);
         */
+        SceneManager::Render(mBackHdc);
+
         copyRenderTarget(mBackHdc,mHdc);
 	}
 
@@ -205,7 +190,6 @@ namespace nptr
 
     void Application::copyRenderTarget(HDC source, HDC dest)
     {
-
         // backBuffer 에 있는걸 원본 buffer 에 복사 (그리기)
         BitBlt(dest, 0, 0, mWidth, mHeight, source, 0, 0, SRCCOPY);
     }

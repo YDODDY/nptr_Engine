@@ -41,8 +41,8 @@ namespace nptr
         }
         if (Input::GetKey(eKeyCode::SpaceBar))
         {
-            bullet->SetPosition(GetPositionX(), GetPositionY());
-            bullet->isPlayerShot = true;
+//            bullet->SetPosition(GetPositionX(), GetPositionY());
+ //           bullet->isPlayerShot = true;
         }
 	}
 	void GameObject::LateUpdate()
@@ -50,10 +50,10 @@ namespace nptr
 
 	}
 	void GameObject::Render(HDC hdc)
-	{
-        HBRUSH brush = CreateSolidBrush(RGB(0, 0, 255));
+	{                                                       // ºþµüºþµü
+        HBRUSH brush = CreateSolidBrush(RGB(rand() % 255 , rand() % 255, rand() % 255));
         HBRUSH oldBrush = (HBRUSH)SelectObject(hdc, brush);
-        Rectangle(hdc, 100 + mX, 100 + mY, 200 + mX, 200 + mY);
+        Ellipse(hdc, mX, mY, 100 + mX, 100 + mY);
         (HBRUSH)SelectObject(hdc, oldBrush);
         DeleteObject(brush);
 	}

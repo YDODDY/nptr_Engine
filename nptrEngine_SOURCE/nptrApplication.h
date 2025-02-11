@@ -42,7 +42,6 @@ namespace nptr
 		// 플레이어에게 필요한 변수 ? 같은 것
 //		float mX;
 //		float mY;
-		std::vector<GameObject*> mGameObjects;
-
+		//std::Vector<Scene*> mScenes;
 	};
 }

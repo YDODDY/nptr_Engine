@@ -28,7 +28,7 @@ namespace nptr
 		float GetPositionX()	{  return mX;  }
 		float GetPositionY()  {  return mY;  }
 
-		BulletObject* bullet;
+//		BulletObject* bullet;
 
 	private:
 

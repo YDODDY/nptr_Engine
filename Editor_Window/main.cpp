@@ -9,6 +9,8 @@
 // Editor_Window 참조 추가 -> 프로젝트, nptrEngine_SOURCE
 // nptrEngine_Window 참조추가 -> 공유 프로젝트, Editor_Window
 #include "..\\nptrEngine_SOURCE\\nptrApplication.h"
+#include "..\\nptrEngine_Window\\LoadScene.h"
+
 
 // namespace nptr
 nptr::Application app;
@@ -170,6 +172,10 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
+
+
+   // LOAD SCENES
+   nptr::LoadScenes();
 
    return TRUE;
 }
